@@ -11,10 +11,13 @@ class Signal:
         if tiempo is None:
             _tiempo = np.arange(self.frame, self.frame + CHUNK)
             self.frame += CHUNK
-        return self.funcion(_tiempo)
+        elif isinstance(tiempo, (int, float)):
+            _tiempo = np.arange(self.frame, self.frame + int(tiempo))
+            self.frame += int(tiempo)
+        return self.fun(_tiempo)
             
     ''' Función que define la señal '''
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return np.zeros(len(tiempo))
     
     def reset(self):
@@ -45,7 +48,7 @@ class Add(Signal):
         self.a = a
         self.b = b
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return self.a.next(tiempo) + self.b.next(tiempo)
     
 class Sub(Signal):
@@ -54,7 +57,7 @@ class Sub(Signal):
         self.a = a
         self.b = b
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return self.a.next(tiempo) - self.b.next(tiempo)
 
 class Mul(Signal):
@@ -63,7 +66,7 @@ class Mul(Signal):
         self.a = a
         self.b = b
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return self.a.next(tiempo) * self.b.next(tiempo)
     
 class Div(Signal):
@@ -72,7 +75,7 @@ class Div(Signal):
         self.a = a
         self.b = b
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return self.a.next(tiempo) / self.b.next(tiempo)
     
 class Neg(Signal):
@@ -80,7 +83,7 @@ class Neg(Signal):
         super().__init__()
         self.a = a
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return -self.a.next(tiempo)
     
 class Pow(Signal):
@@ -89,7 +92,7 @@ class Pow(Signal):
         self.a = a
         self.power = power
         
-    def funcion(self, tiempo):
+    def fun(self, tiempo):
         return self.a.next(tiempo) ** self.power.next(tiempo)
     
 
