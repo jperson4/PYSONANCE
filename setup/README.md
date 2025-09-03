@@ -11,6 +11,7 @@ Proccedemos a importar las librerías:
 ```
 pip install numpy
 pip install sounddevice
+pip install mathplotlib
 ```
 instalamos la libreria que hemos creado:
 ```
