@@ -3,6 +3,10 @@ from audio.const import *
 from audio.signal import *
 
 # TODO no suenan bien entre chunks y no se porqué
+# > va a tocar mezclar las ondas difuminando los bordes
+# >> supongo que tendre que tener 2 oscilaciones y mezclar entre ellas
+# >> podria hacer una clase crossfader
+
 class Wavetable(Signal):
     ''' 
         Wavetable, reproduce un array de numpy en bucle,
