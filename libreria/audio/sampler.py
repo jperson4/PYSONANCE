@@ -3,9 +3,8 @@ from audio.const import *
 from audio.signal import *
 
 # TODO no suenan bien entre chunks y no se por qué
-# > va a tocar mezclar las ondas difuminando los bordes
-# >> supongo que tendre que tener 2 oscilaciones y mezclar entre ellas
-# >> podria hacer una clase crossfader
+# he mezclado de muchas maneras y ni con esas
+# lo mismo es un problema de el playback probare a pasarlo a wav 
 
 class Wavetable(Signal):
     ''' 
@@ -15,13 +14,71 @@ class Wavetable(Signal):
         En caso de samplear ondas (usandolo como wavetable), lo mejor es usar frecuencia 1 
         ya que habrá una buena resolución y ciclará bien.
     '''
-    def __init__(self, table: np.ndarray, freq=1, amp=1, phase=0):
+    def __init__(self, table: np.ndarray, freq=1, amp=1, phase=0, crossfade=10):
         super().__init__()
-        self.table = table
+        if crossfade > 0:
+            self.table = self.cicletable(table, crossfade)
+        else:
+            self.table = table
         self.freq = C(freq)
         self.amp = C(amp)
         self.phase = C(phase)
-        self.frame = 0 # posicion de la tabla en la que estamos
+        
+    def cicletable(self, table: np.ndarray, crossfade) -> np.ndarray:
+        ''' Asegura que la tabla ciclará bien haciendo crossfade entre el final y el principio '''
+        mid = self.find_point_0(table)
+        
+        main = table[:mid] # primera mitad de la tabla
+        cross = table[mid: mid + crossfade] # parte a mezclar
+
+        c10 = np.linspace(1, 0, crossfade) # 1 a 0
+        c01 = np.linspace(0, 1, crossfade) # 0 a 1
+
+        main[:crossfade] = main[:crossfade] * c01 + cross * c10
+        return main
+        
+        main = table[:len(table)//2] # primera mitad de la tabla
+        cross = table[len(table)//2: len(table)//2 + crossfade] # parte a mezclar
+
+        c10 = np.linspace(1, 0, crossfade) # 1 a 0
+        c01 = np.linspace(0, 1, crossfade) # 0 a 1
+
+        main[:crossfade] = main[:crossfade] * c01 + cross * c10
+        return main
+        
+        main = table[:len(table)//2] # primera mitad de la tabla
+        
+        other = table[len(table)//2 - crossfade: len(table)//2 + crossfade] # mitad de la tabla a mezclar
+        fin = other[:crossfade]  # principio de la mezcla
+        ini = other[-crossfade:]  # final de la mezcla
+        
+        # b = np.roll(table, len(table) // 2)
+        c01 = np.linspace(0, 1, crossfade) # 0 a 1
+        c10 = np.linspace(1, 0, crossfade) # 1 a 0
+        
+        main[:crossfade] = main[:crossfade] * c01 + ini * c10
+        main[-crossfade:] = main[-crossfade:] * c10 + fin * c01
+        
+        return main        
+        
+        alphas = np.concatenate((c01, np.ones(len(b) - crossfade * 2), c10)) 
+        betas = np.concatenate((c10, np.zeros(len(main) - crossfade * 2), c01)) 
+        print(alphas)
+        print(betas)
+        table = main * alphas + b * betas
+        return table[:len(table)//2 -1]
+    
+    def find_point_0(self, table):
+        mid = len(table) // 2
+        pos = mid
+        best_amp = abs(table[mid])
+        for offset in range(-10, 10):  # buscar en un rango alrededor del medio
+            i = len(table) // 2 + offset # índice actual
+            if abs(table[i]) < best_amp:
+                best_amp = abs(table[i])
+                pos = i
+        return pos
+
         
     def fun(self, tiempo):
         _freq = self.freq.next(tiempo)  # para que freq esté en Hz
@@ -43,8 +100,8 @@ class WT(Wavetable):
         En caso de samplear ondas (usandolo como wavetable), lo mejor es usar frecuencia 1 
         ya que habrá una buena resolución y ciclará bien.
     '''
-    def __init__(self, table: np.ndarray, freq=1, amp=1, phase=0):
-        super().__init__(table, freq, amp, phase)
+    def __init__(self, table: np.ndarray, freq=1, amp=1, phase=0, crossfade=10):
+        super().__init__(table, freq, amp, phase, crossfade)
 
 class Sampler(Signal):
     ''' 
