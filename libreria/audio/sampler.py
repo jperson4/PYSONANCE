@@ -2,7 +2,7 @@ import numpy as np
 from audio.const import *
 from audio.signal import *
 
-# TODO no suenan bien entre chunks y no se porqué
+# TODO no suenan bien entre chunks y no se por qué
 # > va a tocar mezclar las ondas difuminando los bordes
 # >> supongo que tendre que tener 2 oscilaciones y mezclar entre ellas
 # >> podria hacer una clase crossfader
