@@ -3,7 +3,7 @@ from pysonance.signal import Signal
 
 import pulsectl as pactl
 import sounddevice as sd
-import subprocess
+import numpy as np
 
 command = 'pactl load-module  module-null-sink'
 
@@ -31,12 +31,19 @@ class Pactl(Signal):
         self.cli_name = 'pysonance'
         self.cli = pactl.Pulse(self.cli_name)
         _mod_id = self.create_dev()
-        self.instr = sd.InputStream(samplerate=SRATE, channels=1, callback=self.callback,blocksize=CHUNK, device=f'{self.nombre}.monitor')
-        self.buffer = []
+        self.buffer = np.array([])
+        self.instr = sd.InputStream(samplerate=SRATE, channels=1, callback=self.callback,blocksize=CHUNK, device=f'{self.nombre}')
+        self.instr.start()
+
     
-    def next(self, tiempo):
-        _buff = self.buffer[:len(tiempo):]
+    def fun(self, tiempo):
+        _buff = self.buffer[:len(tiempo)]
         self.buffer = self.buffer[len(tiempo):]
+        
+        # Rellenar con ceros si no tiene el tamaño necesario
+        if len(_buff) < len(tiempo):
+            _buff = np.concatenate((_buff, np.zeros(len(tiempo) - len(_buff))))
+        
         return _buff
         
         
@@ -45,17 +52,14 @@ class Pactl(Signal):
             'media.class=Audio/Source/Virtual',
             f'sink_name={self.nombre}',
             # 'channel_map',
-            f'client_name={self.cli_name}',
+            # f'client_name={self.cli_name}',
             'channels=1'
         ]
         return self.cli.module_load('module-null-sink', args=_args)
         
-        
+
     def callback(self, indata, frames, time, status):
         if status:
             print(status)
-
-        # indata viene como (frames, channels)
-        # lo pasamos a mono (frames,)
         bloque = indata[:, 0].copy()
-        self.buffer.append(bloque)
+        self.buffer = np.concatenate((self.buffer, bloque))
