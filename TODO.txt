@@ -1,5 +1,15 @@
+
+# MOOG:
+arreglar la creación de dispositivos (actualmente si quieres crear uno, te hace falta)
+hacer que se conecten a una fuente directamente
+hacer un notebook nuevo (audio.ipynb) donde no usemos el callback de sound sino que se conecte al dispositivo out desde pactl.py
+
+# FILTROS:
 check kS y los filtros
 hacer un high pass filter
+hacer un filtro usando fourier
 
 
 En algun momento podría traducir las cosas al ingles :p
+
+Reorganizar y dejar un notebook con ejemplos y tests y otro para experimentar
