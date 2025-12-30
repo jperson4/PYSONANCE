@@ -13,10 +13,11 @@ class Line_In(Signal):
     Envuelve una señal para que actúe como un line-in virtual
     '''
     def __init__(self, nombre):
+        super().__init__()
         # self.nombre = nombre
         self.mod = Pactl(nombre)
         
-    def next(self, tiempo):
+    def fun(self, tiempo):
         return self.mod.next(tiempo)
     
 class I(Line_In):
