@@ -7,25 +7,8 @@ import numpy as np
 import threading
 
 command = 'pactl load-module  module-null-sink'
-
-class Line_In(Signal):
-    '''
-    Envuelve una señal para que actúe como un line-in virtual
-    '''
-    def __init__(self, nombre):
-        super().__init__()
-        # self.nombre = nombre
-        self.mod = Pactl(nombre)
-        
-    def fun(self, tiempo):
-        return self.mod.next(tiempo)
     
-class I(Line_In):
-    def __init__(self, nombre):
-        super().__init__(nombre)
-    
-    
-class Pactl(Signal):
+class In_Pactl(Signal):
     '''Line in mediante PACTL'''
     def __init__(self, name):
         super().__init__()
@@ -73,6 +56,9 @@ class Pactl(Signal):
             f'sink_name={self.name}',
             # 'channel_map',
             # f'client_name={self.cli_name}',
-            'channels=1'
+            f'rate={SRATE}',
+            'channels=1',
+            'channel_map=mono',
+            f'sink_properties=device.description={self.name}',
         ]
         return self.cli.module_load('module-null-sink', args=_args)
