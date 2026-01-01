@@ -82,10 +82,6 @@ class Out_Pactl():
     def delete_dev(self):
         self.cli.module_unload(self.mod_id)
         
-    def play(self):
-        ''' Conecta el device a la salida por defecto'''
-        self.cli.sink_input_move(self.out_stream._stream._ptr, self.cli.get_sink_by_name('default').index)
-        
     def create_dev(self):
         _args=[
             'media.class=Audio/Source/Virtual',
