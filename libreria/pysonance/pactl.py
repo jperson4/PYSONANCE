@@ -71,7 +71,7 @@ class Out_Pactl():
         self.cli_name = 'pysonance_out'
         self.cli = pactl.Pulse(self.cli_name)
         
-        _mod_id = self.create_dev()
+        self.mod_id = self.create_dev()
         self.out_stream = sd.OutputStream(samplerate=SRATE, channels=1, blocksize=CHUNK, device=f'{self.sink_name}', callback=self.callback)
         self.out_stream.start()
         
