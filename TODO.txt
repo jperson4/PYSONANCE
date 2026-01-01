@@ -1,8 +1,22 @@
 
 # MOOG:
-arreglar la creación de dispositivos (actualmente si quieres crear uno, te hace falta)
-hacer que se conecten a una fuente directamente
+arreglar la creación de dispositivos -> no se si habra alguna manera de eliminarlos al cerrar el script
+    -> hacer la liista de dispositivos
+    -> ver como crear sin tener que reiniciar sd
+        -> una idea es usar archivos .py en vez de jupyter, pero tendria que buscar una manera comoda de lanzarlos
 hacer un notebook nuevo (audio.ipynb) donde no usemos el callback de sound sino que se conecte al dispositivo out desde pactl.py
+
+# LANZADOR:
+crear un fichero plantilla con todos los imports y la estructura basica
+hacer un script que lance el ultimo y abra una copia de la plantilla para editar el siguiente
+
+tambien podria tener un jupyter donde ir creando cada modulo
+y un script que obtenga de cada celda del juoter el codigo y lo meta en el main de una plantilla y lo ejecute
+1. funcion bucle que detecte un archivo en una carpeta temporal y lo ejecute y lo borre
+2. cada celda es una funcion basada en una plantilla en la que declara el modulo 
+3. al ejecutar la celda, se genera el archivo py en la carpeta temporal, tambien se genera otra celda con la plantilla vacia
+4. el bucle detecta el archivo y lo ejecuta
+
 
 # FILTROS:
 check kS y los filtros
