@@ -1,5 +1,5 @@
 
-from pysonance.pactl import In_Pactl
+from pysonance.pactl import In_Pactl, Out_Pactl
 from pysonance.signal import Signal
 
 class Line_In(Signal):
@@ -16,6 +16,9 @@ class Line_In(Signal):
         
     def fun(self, tiempo):
         return self.mod.next(tiempo)
+    
+    def delete_dev(self):
+        self.mod.delete_dev()
     
 class I(Line_In):
     def __init__(self, nombre):
@@ -37,3 +40,12 @@ class LineOut():
     #     _sig = self.signal.next(tiempo)
     #     self.mod.send(_sig)
     #     return _sig
+    def delete_dev(self):
+        self.mod.delete_dev()
+        
+    def play(self):
+        self.mod.play()
+        
+class O(LineOut):
+    def __init__(self, device, signal:Signal):
+        super().__init__(device, signal)
