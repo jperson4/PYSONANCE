@@ -31,3 +31,4 @@ pip install -e ../libreria
 
 ### Also check:
 - [osc_gen](https://github.com/harveyormston/osc_gen)
+- [AudioNoise](https://github.com/torvalds/AudioNoise)
