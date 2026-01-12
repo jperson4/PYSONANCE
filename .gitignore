@@ -208,3 +208,4 @@ __marimo__/
 pruebas/ayudas.ipynb
 pruebas/0_ayudas.ipynb
 .vscode/**
+rack/modules/**
