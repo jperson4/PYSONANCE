@@ -25,6 +25,13 @@ check kS y los filtros
 hacer un high pass filter
 hacer un filtro usando fourier
 
+# SECUENCIADOR - MIDI:
+en helvium tambien se puede controlar el MIDI
+deberia hacer una clase que mande Una señal cada negra (reloj)
+y clases que reciban de ese reloj
+TODO investigar todos los mensajes MIDI que puedo usar
+
+
 # UI
 podria hacer una UI externa para controlar la clase Const
 de hecho si hago otra para controlar los ins y los outs, me quito de tener que usar helvium
