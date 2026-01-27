@@ -36,6 +36,9 @@ TODO investigar todos los mensajes MIDI que puedo usar
 podria hacer una UI externa para controlar la clase Const
 de hecho si hago otra para controlar los ins y los outs, me quito de tener que usar helvium
 
+checkear qtnodes y NodeGraphQt como alternativa a helvium, (aunque lo mismo es más rápido un fork de helvium).
+En nodegraphqt se pueden poner sliders y esas cosas, lo cual sería super práctico
+
 En algun momento podría traducir las cosas al ingles :p
 
 Reorganizar y dejar un notebook con ejemplos y tests y otro para experimentar
